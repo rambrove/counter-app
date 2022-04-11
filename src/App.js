@@ -58,9 +58,9 @@ function App () {
       if (window.ethereum) {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
-        const bankContract = new ethers.Contract(contractAddress, contractABI, signer);
+        const ConuterContract = new ethers.Contract(contractAddress, contractABI, signer);
 
-        const txn = await bankContract.inc();
+        const txn = await ConuterContract.inc();
         console.log("Incrementing counter...");
         await txn.wait();
         console.log("Incremented Counter", txn.hash);
@@ -81,9 +81,9 @@ function App () {
       if (window.ethereum) {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
-        const bankContract = new ethers.Contract(contractAddress, contractABI, signer);
+        const CounterContract = new ethers.Contract(contractAddress, contractABI, signer);
 
-        const txn = await bankContract.dec();
+        const txn = await CounterContract.dec();
         console.log("Decrementing counter...");
         await txn.wait();
         console.log("Decremented Counter", txn.hash);
