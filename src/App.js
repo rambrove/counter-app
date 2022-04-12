@@ -10,6 +10,7 @@ function App () {
     const [customerAddress, setCustomerAddress] = useState(null);
 
     const [isWalletConnected, setIsWalletConnected] = useState(false);
+    const [walletStatus, setWalletStatus] = useState(null);
     const contractAddress = '0x3b5aD3FbC7deeA1aebD7b184a609c1B25a038AEF';
     const contractABI = abi.abi;
 
@@ -20,32 +21,29 @@ function App () {
           const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
           const account = accounts[0];
           setIsWalletConnected(true);
+          setWalletStatus('Connected');
           setCustomerAddress(account);
           console.log("Account Connected: ", account);
         } else {
           setError("Please install a MetaMask wallet to use our counter.");
           console.log("No Metamask detected");
+          setWalletStatus('Disconnected, Please connect Metamask | Network : Rinkeby');
         }
       } catch (error) {
         console.log(error);
       }
-    }
+    } 
 
     const getCounter = async () =>  {
         try {
-            if(window.ethereum) {
-                const provider = new ethers.providers.Web3Provider(window.ethereum);
-                const signer = provider.getSigner();
-
-                const ConuterContract = new ethers.Contract(contractAddress, contractABI, signer);
-                let counterValue = await ConuterContract.get();
-                console.log(counterValue);
-               
-                setCurrentCounterValue(counterValue.toString());
-            } else {
-                console.log("Ethereum object not found, install Metamask.");
-                setError("Please install a MetaMsk wallet to use our Counter");
-            }
+          //Using infura to use get method : this helps to fire the view function without wallet intallation
+          const provider = new ethers.providers.InfuraProvider('rinkeby','38b7330bc7ae40ebbd73d8d7d68a673a','Ae1f4765de0743759752808d4fddf0ba');
+          //  const provider = new ethers.providers.Web3Provider(window.ethereum);
+          const ConuterContract = new ethers.Contract(contractAddress, contractABI, provider);
+          let counterValue = await ConuterContract.get();
+          console.log(counterValue);
+          
+          setCurrentCounterValue(counterValue.toString());
         } catch (error) {
             console.log(error)
         }
@@ -68,7 +66,8 @@ function App () {
 
       } else {
         console.log("Ethereum object not found, install Metamask.");
-        setError("Please install a MetaMask wallet to use our bank.");
+        setError("Please install a MetaMask wallet to use our counter.");
+        setWalletStatus('Disconnected, Please connect Metamask | Network : Rinkeby');
       }
     } catch (error) {
       console.log(error)
@@ -91,7 +90,8 @@ function App () {
 
       } else {
         console.log("Ethereum object not found, install Metamask.");
-        setError("Please install a MetaMask wallet to use our bank.");
+        setError("Please install a MetaMask wallet to use our counter.");
+        setWalletStatus('Disconnected, Please connect Metamask | Network : Rinkeby');
       }
     } catch (error) {
       console.log(error)
@@ -100,8 +100,10 @@ function App () {
 
 
     useEffect(() => {
-      checkIfWalletIsConnected();
+      setWalletStatus('Disconnected, Please connect Metamask | Network : Rinkeby');
       getCounter();
+      checkIfWalletIsConnected();
+      
   
     }, [isWalletConnected])
 
@@ -114,15 +116,18 @@ function App () {
             <p>
               Counter Value:  {currentCounterValue}
             </p>
+            <p>
+              Wallet Status:  {walletStatus}
+            </p>
             
           </header>
      
 
 
 
-            <div class="container">
-              <div class="center">
-              <button className="App-button" onClick={setIncrement}> 
+            <div className="container">
+              <div className="center">
+             <button className="App-button" onClick={setIncrement}> 
                 Increment
               </button>
                <button className="App-button" onClick={setDecrement}> 
