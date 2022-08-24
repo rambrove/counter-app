@@ -14,18 +14,18 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #7b64bb;
   min-height: 20vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: rgb(223, 214, 224);
 }
 
 .App-body {
-  background-color: #0e6481;
+  background-color: #401646;
   min-height: 20vh;
   display: flex;
   flex-direction: column;
@@ -49,7 +49,7 @@
 }
 
 .App-button {
-  background-color: #4CAF50;
+  background-color: #7b64bb;
   border: none;
   color: white;
   padding: 15px 32px;
@@ -62,7 +62,7 @@
 }
 
 .container { 
-  background-color: #0e6481;
+  background-color: #4d1a52;
   height: 200px;
   position: relative;
 }
